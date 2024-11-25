@@ -1,0 +1,46 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CharacterScript : MonoBehaviour
+{
+    [SerializeField] Rigidbody rb; //hace referencia al cuerpo de mi pj
+    [SerializeField] float speed; // velocidad del personaje
+    [SerializeField] float shift; //Cantidad de unidades que el personaje izq y derecha
+    [SerializeField] float jumpForce; //variable salto
+    [SerializeField] Animator anim; //guarda las animaciones
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A)&& transform.position.x>-2)
+        {
+            transform.Translate(-shift, 0, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.D)&& transform.position.x<2)
+        {
+            transform.Translate(shift, 0, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rb.velocity.y) > 0)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            anim.SetBool("jump",true);
+            
+        }
+
+        if (Mathf.Abs(rb.velocity.y) ==0)
+        {
+            anim.SetBool("jump",false);
+        }
+
+    }
+
+    void FixedUpdate() //funcion responsable del movimiento de cuerpos RB
+    {
+       rb.MovePosition(transform.position+transform.forward*speed*Time.deltaTime);
+    }
+}
